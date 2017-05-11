@@ -19,15 +19,10 @@ $("#add-train-btn").on("click", function(event) {
 // Grabs user input
   var trainName = $("#train-name-input").val().trim();
   var destination = $("#destination-input").val().trim();
-  var empStart = moment($("#start-input").val().trim(), "hh:mm").format("X");
+  var empStart = $("#start-input").val().trim();
   var frequency = $("#frequency-input").val().trim();
-  var today = $("#start-input").val().trim();
 
-  var Day = parseInt(moment(empStart).format("hh:mm"));
-
-
-
-    console.log("Day: " + Day);
+  console.log("start day:" +empStart);
 
 
 // Creates local "temporary" object for holding train data
@@ -41,11 +36,6 @@ $("#add-train-btn").on("click", function(event) {
   // Uploads employee data to the database
   database.ref().push(newTrain);
 
-  // Logs everything to console
-  console.log(newTrain.trainName);
-  console.log(newTrain.destination);
-  console.log(newTrain.empStart);
-  console.log(newTrain.frequency);
 
   // Alert
   alert("train successfully added");
@@ -70,19 +60,11 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   var empStart = childSnapshot.val().start;
   var frequency = childSnapshot.val().frequency;
 
-  // Employee Info
-  console.log(name);
-  console.log(destination);
-  console.log("Start time:" + empStart);
-  console.log(frequency);
 
   var tFrequency = frequency;
 
-    // Time is 3:30 AM
-    var firstTime = '3:30';
-
-
-
+  // Time is 3:30 AM
+  var firstTime = empStart;
 
     // First Time (pushed back 1 year to make sure it comes before current time)
     var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
@@ -107,9 +89,6 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
     // Next Train
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
     console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
-
-
-
 
   // Prettify the employee start
   var empStartPretty = moment.unix(empStart).format("MM/DD/YY");
